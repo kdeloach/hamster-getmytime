@@ -6,12 +6,9 @@ from __future__ import division
 
 import argparse
 import json
-import re
 import requests
 import sys
 import time
-
-from datetime import datetime
 
 
 class GetMyTimeApi(object):
