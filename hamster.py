@@ -4,13 +4,20 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 
+import sys
 import argparse
 import math
 import json
 import os.path
 import sqlite3
+import logging
 
 from datetime import datetime, timedelta
+
+
+log = logging.getLogger(__name__)
+log.addHandler(logging.StreamHandler(sys.stderr))
+log.setLevel(logging.DEBUG)
 
 
 DATE_FORMAT = '%m/%d/%Y %H:%M:%S'
@@ -18,6 +25,7 @@ DATE_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 def fetch_rows(start_date, end_date):
     path = os.path.expanduser('~/.local/share/hamster-applet/hamster.db')
+    log.debug(path)
 
     query = """
         select
@@ -79,6 +87,8 @@ def main():
         args.start_time = datetime.strptime(args.start_time, DATE_FORMAT)
     if isinstance(args.end_time, basestring):
         args.end_time = datetime.strptime(args.end_time, DATE_FORMAT)
+
+    log.debug(args)
 
     data = fetch_rows(args.start_time, args.end_time)
     print(json.dumps(list(data)))
