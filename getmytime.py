@@ -51,7 +51,9 @@ class GetMyTimeApi(object):
         r = requests.post(self.URL, params=params, data=form_data,
                           cookies=self.cookies)
         data = r.json()
-        customers = dict((row['strClientJobName'].lower(),
+        customers = dict((row['strClientJobName']
+                          .lower()
+                          .replace('&amp;', '&'),
                           row['intClientJobListID'])
                          for row in data['customerjobs']['rows'])
 
