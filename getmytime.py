@@ -45,7 +45,7 @@ class GetMyTimeApi(object):
             'method': 'fetchLookups'
         }
         form_data = {
-            'lookups': '[projectgroups],[customerjobs],[serviceitems]'
+            'lookups': '[customerjobs],[serviceitems]'
         }
 
         r = requests.post(self.URL, params=params, data=form_data,
