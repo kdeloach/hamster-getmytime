@@ -75,6 +75,11 @@ def main():
     parser.add_argument('end_time', nargs='?', default=tomorrow)
     args = parser.parse_args()
 
+    if isinstance(args.start_time, basestring):
+        args.start_time = datetime.strptime(args.start_time, DATE_FORMAT)
+    if isinstance(args.end_time, basestring):
+        args.end_time = datetime.strptime(args.end_time, DATE_FORMAT)
+
     data = fetch_rows(args.start_time, args.end_time)
     print(json.dumps(list(data)))
 
