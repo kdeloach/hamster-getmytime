@@ -69,6 +69,8 @@ class GetMyTimeApi(object):
                           end_time, tags, minutes):
         self.fetch_lookups()
 
+        tags = tags if tags else []
+
         employeeid = self.cookies['userid']
         customerid = self.customers[customer.lower()]
         billable = 'billable' in tags
