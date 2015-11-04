@@ -70,9 +70,21 @@ def squash_rows(rows):
 
 
 def combine_entries(acc, entry):
-    # Expand date range to include both entries.
-    start_time = min(acc.start_time, entry.start_time)
-    end_time = max(acc.end_time, entry.end_time)
+    # Expand end_time by `entry` duration. This means that the start and
+    # end times for combined entries won't be very meaningful.
+    # However, the duration of interspersed records would be wildly
+    # innacurate, otherwise.
+    #
+    # For example, if you spent 15 minutes on X at 10AM, and then another 15
+    # minutes on X at 1PM, the total duration should be 30 minutes or
+    # (10AM + 15m + 15) instead of 3h15m.
+    #
+    # In other words, since we calculate durations from start/end times
+    # instead of saving the absolute duration per record, we must modify
+    # these datetime fields when combining records to get a correct total
+    # duration.
+    minutes = to_minutes(entry.end_time - entry.start_time)
+    end_time = acc.end_time + timedelta(minutes=minutes)
 
     # Separate multiple entry comments with semicolon.
     comments = filter(None, [acc.comments, entry.comments])
@@ -83,7 +95,7 @@ def combine_entries(acc, entry):
     tags = acc.tags if len(acc.tags) > len(entry.tags) else entry.tags
 
     return TimesheetRecord(
-        start_time,
+        acc.start_time,
         end_time,
         acc.customer,
         acc.activity,
