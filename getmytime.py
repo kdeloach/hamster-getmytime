@@ -88,7 +88,7 @@ class GetMyTimeApi(object):
             'employeeid': employeeid,
             'startdate': start_time,
             'startdatetime': start_time,
-            'minutes': minutes,
+            'minutes': int(minutes),
             'customerid': customerid,
             'taskid': taskid,
             'comments': comments,
