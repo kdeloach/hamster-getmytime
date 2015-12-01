@@ -73,12 +73,8 @@ class GetMyTimeApi(object):
 
         employeeid = self.cookies['userid']
         customerid = self.customers[customer.lower()]
+        taskid = self.tasks[activity.lower()]
         billable = 'billable' in tags
-
-        if activity in self.tasks:
-            taskid = self.tasks[activity.lower()]
-        else:
-            taskid = self.tasks['Software Development'.lower()]
 
         params = {
             'object': 'getmytime.api.timeentrymanager',
