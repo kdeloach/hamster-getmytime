@@ -12,7 +12,7 @@ import time
 
 
 class GetMyTimeApi(object):
-    URL = 'http://app.getmytime.com/service.aspx'
+    URL = 'https://app.getmytime.com/service.aspx'
 
     def __init__(self, dry_run=False):
         self.dry_run = dry_run
