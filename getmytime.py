@@ -126,15 +126,11 @@ def main():
 
     if args.from_json:
         entries = json.loads(sys.stdin.read())
-
         api = GetMyTimeApi(dry_run=args.dry_run)
         api.login(args.username, args.password)
-
         for entry in entries:
             api.create_time_entry(**entry)
-
         print('Done')
-
     else:
         print('Nothing to do')
 
