@@ -92,7 +92,9 @@ def combine_entries(acc, entry):
 
     # Use the longest tags field.
     # TODO: Union all tags and remove duplicates (comma separated list)
-    tags = acc.tags if len(acc.tags) > len(entry.tags) else entry.tags
+    acc_tags = acc.tags if acc.tags else []
+    entry_tags = entry.tags if entry.tags else []
+    tags = acc_tags if len(acc_tags) > len(entry_tags) else entry_tags
 
     return TimesheetRecord(
         acc.start_time,
