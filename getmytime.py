@@ -6,9 +6,15 @@ from __future__ import division
 
 import argparse
 import json
+import logging
 import requests
 import sys
 import time
+
+
+log = logging.getLogger(__name__)
+log.addHandler(logging.StreamHandler(sys.stderr))
+log.setLevel(logging.DEBUG)
 
 
 class GetMyTimeApi(object):
@@ -94,18 +100,21 @@ class GetMyTimeApi(object):
             'starttimer': 'false',
         }
 
-        print('Submitting {} - {}, {}'.format(start_time, end_time, customer))
+        if len(comments.strip()) == 0:
+            raise Exception('Comments field may not be empty')
 
-        if self.dry_run:
-            print(form_data)
-        else:
+        log.info('Submitting {} - {}, {}'.format(start_time,
+                                                 end_time,
+                                                 customer))
+
+        if not self.dry_run:
             r = requests.post(self.URL, params=params, data=form_data,
                               cookies=self.cookies)
 
             if 'error' in r.text:
                 raise Exception(r.text)
 
-            print(r.status_code, r.text)
+            log.info(r.status_code, r.text)
 
             time.sleep(1)
 
