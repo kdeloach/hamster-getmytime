@@ -1,7 +1,8 @@
 ## Hamster GetMyTime
 
-Submit timesheet data from [Hamster Indicator](https://apps.ubuntu.com/cat/applications/precise/hamster-indicator/)
-directly to [GetMyTime](http://www.getmytime.com/).
+Convert timesheet entries created by [Hamster Indicator](https://apps.ubuntu.com/cat/applications/precise/hamster-indicator) into JSON.
+The output can be consumed by [getmytime-cli](https://github.com/kdeloach/getmytime-cli) to submit timesheet
+entries directly into [GetMyTime](http://www.getmytime.com).
 
 New activities in Hamster must be created in the following format:
 
@@ -9,12 +10,12 @@ New activities in Hamster must be created in the following format:
 
 Example:
 
-`ACME@software development, fixing some bugs... #billable`
+`ACME@Software Development, fixing some bugs... #billable`
 
 ### Usage
 
 ```bash
-./hamster.py <start_date> <end_date> | ./getmytime.py <username> <password> --from-json
+./hamster.py <start_date> <end_date>
 ```
 
 ### Help
@@ -29,18 +30,4 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-```
-
-```
-./getmytime.py -h
-usage: getmytime.py [-h] [--dry-run] [--from-json] username password
-
-positional arguments:
-  username
-  password
-
-optional arguments:
-  -h, --help   show this help message and exit
-  --dry-run
-  --from-json  Read JSON data from stdin
 ```
