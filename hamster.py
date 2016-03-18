@@ -12,6 +12,7 @@ import os.path
 import sqlite3
 import logging
 import itertools
+import dateutil.parser
 
 from collections import namedtuple
 from datetime import datetime, timedelta
@@ -19,19 +20,20 @@ from datetime import datetime, timedelta
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.StreamHandler(sys.stderr))
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.ERROR)
 
 
 DATE_FORMAT = '%m/%d/%Y'
 DATETIME_FORMAT = '%m/%d/%Y %H:%M:%S'
+HAMSTER_DB = '~/.local/share/hamster-applet/hamster.db'
 
 
-TimesheetRecord = namedtuple('TimesheetRecord', ['start_time', 'end_time',
-                             'customer', 'activity', 'comments', 'tags'])
+TimesheetRecord = namedtuple('TimesheetRecord', [
+    'start_time', 'end_time', 'customer', 'activity', 'comments', 'tags'])
 
 
 def fetch_rows(start_date, end_date):
-    path = os.path.expanduser('~/.local/share/hamster-applet/hamster.db')
+    path = os.path.expanduser(HAMSTER_DB)
     log.debug(path)
 
     query = """
@@ -110,13 +112,13 @@ def format_rows(rows):
     for row in rows:
         minutes = round_minutes(to_minutes(row.end_time - row.start_time))
         yield {
-            'start_time': row.start_time.strftime(DATETIME_FORMAT),
-            'end_time': row.end_time.strftime(DATETIME_FORMAT),
+            'startdate': row.start_time.strftime(DATETIME_FORMAT),
+            'enddate': row.end_time.strftime(DATETIME_FORMAT),
             'customer': row.customer,
             'activity': row.activity,
             'comments': row.comments or '',
             'tags': row.tags or '',
-            'minutes': minutes,
+            'minutes': int(minutes),
         }
 
 
@@ -169,9 +171,9 @@ def main():
     args = parser.parse_args()
 
     if isinstance(args.start_time, basestring):
-        args.start_time = datetime.strptime(args.start_time, DATETIME_FORMAT)
+        args.start_time = dateutil.parser.parse(args.start_time)
     if isinstance(args.end_time, basestring):
-        args.end_time = datetime.strptime(args.end_time, DATETIME_FORMAT)
+        args.end_time = dateutil.parser.parse(args.end_time)
 
     log.debug(args)
 
