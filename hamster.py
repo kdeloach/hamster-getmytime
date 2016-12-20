@@ -168,6 +168,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('start_time', nargs='?', default=yesterday)
     parser.add_argument('end_time', nargs='?', default=tomorrow)
+    parser.add_argument('--pretty', action='store_true')
     args = parser.parse_args()
 
     if isinstance(args.start_time, basestring):
@@ -177,8 +178,13 @@ def main():
 
     log.debug(args)
 
-    data = fetch_rows(args.start_time, args.end_time)
-    print(json.dumps(list(data)))
+    output_args = {}
+    if args.pretty:
+        output_args['indent'] = 4
+
+    data = list(fetch_rows(args.start_time, args.end_time))
+    json.dump(data, sys.stdout, **output_args)
+    sys.stdout.write('\n')
 
 
 if __name__ == '__main__':
