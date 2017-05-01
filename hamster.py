@@ -90,11 +90,11 @@ def combine_entries(acc, entry):
 
     # Join multiple entry comments with semicolon and skip duplicate comments.
     # Ex:
-    # "Fix Bug" + "PR Review" -> "Fix Bug; PR Review"
-    # "PR Review" + "PR Review" -> "PR Review"
+    # ['Fix Bug', 'PR Review'] -> 'Fix Bug; PR Review'
+    # ['PR Review', 'PR Review'] -> 'PR Review'
     comments = acc.comments or ''
     if entry.comments and entry.comments.lower() not in comments.lower():
-        comments = '; '.join([comments, entry.comments]).strip()
+        comments = '; '.join(filter(None, [comments, entry.comments])).strip()
 
     # Use the longest tags field.
     # TODO: Union all tags and remove duplicates (comma separated list)
