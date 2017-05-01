@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 
+import os
 import sys
 import argparse
 import math
@@ -25,7 +26,9 @@ log.setLevel(logging.ERROR)
 
 DATE_FORMAT = '%m/%d/%Y'
 DATETIME_FORMAT = '%m/%d/%Y %H:%M:%S'
-HAMSTER_DB = '~/.local/share/hamster-applet/hamster.db'
+
+DEFAULT_DB = '~/.local/share/hamster-applet/hamster.db'
+HAMSTER_DB = os.environ.get('HAMSTER_DB', DEFAULT_DB)
 
 
 TimesheetRecord = namedtuple('TimesheetRecord', [
